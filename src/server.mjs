@@ -1,6 +1,6 @@
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
-import { extname, join } from 'node:path';
+import { extname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildBoard } from './core.mjs';
 
@@ -9,7 +9,13 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 const board = buildBoard(JSON.parse(await readFile(join(root, fixturePath), 'utf8')));
 const publicDir = join(root, 'public');
 
-const contentTypes = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8' };
+const contentTypes = {
+  '.html': 'text/html; charset=utf-8',
+  '.js': 'text/javascript; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.png': 'image/png',
+  '.svg': 'image/svg+xml',
+};
 
 const server = createServer(async (request, response) => {
   try {
@@ -18,9 +24,19 @@ const server = createServer(async (request, response) => {
       response.end(JSON.stringify(board));
       return;
     }
-    const file = request.url?.startsWith('/review/') ? 'index.html' : 'index.html';
-    const body = await readFile(join(publicDir, file));
-    response.writeHead(200, { 'content-type': contentTypes[extname(file)] || 'text/plain; charset=utf-8' });
+    const pathname = new URL(request.url || '/', 'http://127.0.0.1').pathname;
+    const relative = pathname === '/' || pathname.startsWith('/review/')
+      ? 'index.html'
+      : pathname.replace(/^\/+/, '');
+    const file = resolve(publicDir, relative);
+    if (file !== publicDir && !file.startsWith(`${publicDir}\\`) && !file.startsWith(`${publicDir}/`)) {
+      throw new Error('asset path outside public directory');
+    }
+    const body = await readFile(file);
+    response.writeHead(200, {
+      'content-type': contentTypes[extname(file)] || 'text/plain; charset=utf-8',
+      'access-control-allow-origin': '*',
+    });
     response.end(body);
   } catch {
     response.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' });

@@ -2,3 +2,6 @@ node_modules/
 *.log
 .DS_Store
 coverage/
+# Temporary local copies used only for browser upload testing.
+/public/dashboard.png
+/public/dashboard-mobile.png
