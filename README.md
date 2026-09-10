@@ -32,6 +32,20 @@ npm run serve
 
 Open `http://127.0.0.1:4173` after `npm run serve`.
 
+## Working screenshots
+
+These captures were taken from the running local dashboard with the synthetic fixture above. They show the actual responsive interface, not AI-generated mockups or client results.
+
+**Desktop review board**
+
+![Desktop review board](docs/dashboard.png)
+
+**Mobile review board**
+
+![Mobile review board](docs/dashboard-mobile.png)
+
+The board is intentionally read-only: it demonstrates the review flow and deterministic checks without social-platform credentials or automatic publishing.
+
 The CLI also supports:
 
 ```bash
