@@ -1,5 +1,7 @@
 # Content Approval Desk
 
+[![Tests](https://github.com/Shivam9864op/content-approval-desk/actions/workflows/ci.yml/badge.svg)](https://github.com/Shivam9864op/content-approval-desk/actions/workflows/ci.yml)
+
 Small social-media teams often keep a content plan in a spreadsheet and approvals in chat. That makes it easy to publish the wrong version, miss a booking link, or schedule two posts in the same slot. This personal open-source demo creates one local review board with clear checks and decisions before anything is scheduled.
 
 ## Why this project
