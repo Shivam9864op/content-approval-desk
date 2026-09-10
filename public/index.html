@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Content Approval Desk</title>
+    <style>
+      :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; --bg: #10131a; --panel: #171c25; --line: #2a3342; --muted: #9aa8bb; --blue: #79a7ff; --red: #ff8f8f; --green: #71dfaa; }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: radial-gradient(circle at top right, #1c2740, var(--bg) 52%); color: #f5f7fb; }
+      main { max-width: 1100px; margin: 0 auto; padding: 42px 20px 64px; }
+      header { display: flex; justify-content: space-between; gap: 24px; align-items: flex-end; margin-bottom: 28px; }
+      h1 { font-size: clamp(2rem, 5vw, 3.5rem); letter-spacing: -0.05em; margin: 0 0 10px; }
+      p { color: var(--muted); line-height: 1.55; margin: 0; }
+      .eyebrow { color: var(--blue); font-weight: 700; text-transform: uppercase; letter-spacing: .12em; font-size: .76rem; }
+      .link { color: var(--blue); text-decoration: none; font-size: .9rem; }
+      .summary { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 22px 0 28px; }
+      .stat { background: rgba(23, 28, 37, .9); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+      .stat strong { display: block; font-size: 1.7rem; margin-bottom: 4px; }
+      .stat span { color: var(--muted); font-size: .8rem; }
+      .board { display: grid; gap: 14px; }
+      .card { background: rgba(23, 28, 37, .94); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: grid; grid-template-columns: 1fr auto; gap: 18px; }
+      .card h2 { font-size: 1.15rem; margin: 0 0 7px; }
+      .meta { color: var(--muted); font-size: .85rem; margin-bottom: 12px; }
+      .state { border-radius: 999px; padding: 7px 11px; height: fit-content; font-size: .76rem; font-weight: 700; white-space: nowrap; }
+      .state.approved { background: rgba(113, 223, 170, .14); color: var(--green); }
+      .state.needs_changes, .state.changes_requested { background: rgba(255, 143, 143, .14); color: var(--red); }
+      .state.ready_for_approval { background: rgba(121, 167, 255, .14); color: var(--blue); }
+      .checks { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+      .check { border-top: 1px solid var(--line); padding-top: 9px; font-size: .84rem; }
+      .check b { color: #f5f7fb; }
+      .check small { color: var(--muted); display: block; margin-top: 3px; }
+      footer { color: var(--muted); font-size: .8rem; margin-top: 28px; }
+      @media (max-width: 700px) { header { display: block; } .summary { grid-template-columns: repeat(2, 1fr); } .card { grid-template-columns: 1fr; } .checks { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <div class="eyebrow">Personal open-source demo · synthetic data</div>
+          <h1>Content Approval Desk</h1>
+          <p>A small review board for turning a social-media brief into clear, checkable decisions before anything is scheduled.</p>
+        </div>
+        <a class="link" id="review-link" href="#">Copy review link</a>
+      </header>
+      <section class="summary" id="summary" aria-label="Campaign summary"></section>
+      <section class="board" id="board" aria-live="polite"><p>Loading board…</p></section>
+      <footer>No social-platform login, credentials, automatic publishing, or real customer data is used. This local demo shows review and approval boundaries.</footer>
+    </main>
+    <script>
+      const labels = [['total', 'items'], ['needsChanges', 'need changes'], ['readyForApproval', 'ready'], ['approved', 'approved'], ['collisions', 'collisions']];
+      const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
+      fetch('/api/board').then((response) => response.json()).then((board) => {
+        document.getElementById('summary').innerHTML = labels.map(([key, label]) => `<div class="stat"><strong>${board.summary[key]}</strong><span>${label}</span></div>`).join('');
+        const link = document.getElementById('review-link'); link.href = board.reviewLink; link.textContent = board.reviewLink;
+        document.getElementById('board').innerHTML = board.items.map((item) => `<article class="card"><div><h2>${escapeHtml(item.id)} · ${escapeHtml(item.platform)}</h2><div class="meta">${escapeHtml(item.scheduledAt || 'No schedule')} · owner: ${escapeHtml(item.owner)}</div><p>${escapeHtml(item.hook)}</p><div class="checks"><div class="check"><b>Blocking checks</b><small>${item.review.issues.length ? item.review.issues.map(escapeHtml).join('<br>') : 'None'}</small></div><div class="check"><b>Review notes</b><small>${item.review.warnings.length ? item.review.warnings.map(escapeHtml).join('<br>') : 'None'}</small></div></div></div><span class="state ${escapeHtml(item.state)}">${escapeHtml(item.state.replaceAll('_', ' '))}</span></article>`).join('');
+      }).catch(() => { document.getElementById('board').innerHTML = '<p>Start the local server with <code>npm run serve</code> to view the board.</p>'; });
+    </script>
+  </body>
+</html>

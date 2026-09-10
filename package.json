@@ -1,0 +1,18 @@
+{
+  "name": "content-approval-desk",
+  "version": "1.0.0",
+  "description": "A local, deterministic review board for social-media content approvals.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test",
+    "validate": "node src/cli.mjs validate fixtures/campaign.json",
+    "board": "node src/cli.mjs board fixtures/campaign.json",
+    "json": "node src/cli.mjs json fixtures/campaign.json",
+    "serve": "node src/server.mjs fixtures/campaign.json"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  }
+}

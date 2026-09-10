@@ -1,0 +1,51 @@
+{
+  "campaignId": "bhagalpur-september-demo",
+  "name": "Bhagalpur Fitness Week",
+  "objective": "give a small local team a reviewable weekly content plan",
+  "items": [
+    {
+      "id": "fitness-001",
+      "platform": "instagram",
+      "scheduledAt": "2026-09-12T09:00:00+00:00",
+      "hook": "A stronger week starts with one session",
+      "caption": "Show the morning class, the coach's tip, and the simple way to book a trial session.",
+      "cta": "Book a trial",
+      "asset": "assets/fitness-001.jpg",
+      "altText": "Coach demonstrating a warm-up to a small group in a bright gym",
+      "destinationUrl": "https://example.test/fitness/trial",
+      "tags": ["#bhagalpur", "#fitness"]
+    },
+    {
+      "id": "fitness-002",
+      "platform": "instagram",
+      "scheduledAt": "2026-09-12T09:00:00+00:00",
+      "hook": "Meet the trainer behind the plan",
+      "caption": "A short trainer introduction with one practical form tip and the next class time.",
+      "cta": "See class times",
+      "asset": "assets/fitness-002.jpg",
+      "altText": "Fitness trainer explaining a movement beside gym equipment",
+      "destinationUrl": "https://example.test/fitness/classes",
+      "tags": ["#bhagalpur", "#gym"]
+    },
+    {
+      "id": "fitness-003",
+      "platform": "linkedin",
+      "scheduledAt": "2026-09-13T12:00:00+00:00",
+      "hook": "What a clear local offer looks like",
+      "caption": "A practical example of turning a class schedule into a clear local post. No guaranteed results—just a testable message and a simple next step.",
+      "cta": "Read the outline",
+      "asset": "assets/fitness-003.jpg",
+      "altText": "Content plan card showing a class schedule and a call to action",
+      "destinationUrl": "https://example.test/fitness/outline",
+      "tags": ["#contentstrategy", "#localbusiness"],
+      "owner": "shivam"
+    }
+  ],
+  "decisions": {
+    "fitness-003": {
+      "state": "approved",
+      "reviewer": "demo-owner",
+      "note": "Synthetic example approved for the local demo."
+    }
+  }
+}
